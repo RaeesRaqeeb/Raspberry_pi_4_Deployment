@@ -1,0 +1,28 @@
+sudo raspi-config
+# Interface Options → Camera → Enable
+sudo reboot
+
+Step 2 — Install dependencies
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3-pip python3-opencv -y
+pip3 install tflite-runtime requests numpy picamera2
+
+auto start:
+sudo nano /etc/systemd/system/yolo-pi.service
+
+[Unit]
+Description=YOLO Pi Client
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/client.py
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+# Then enable it:
+sudo systemctl enable yolo-pi
+sudo systemctl start yolo-pi
